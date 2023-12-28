@@ -1,6 +1,5 @@
 import styles from './styles.module.css'
 import { useState } from 'react'
-
 function App() {
   const [grid, setGrid] = useState<string[][]>([
     ['', '', ''],
@@ -8,33 +7,47 @@ function App() {
     ['', '', ''],
   ])
 
-  const choice = (y: number, x: number) => {
-    const newGrid = grid.map((c, i) =>{
-      if(i === y){
-        return c.map((r, j) => {
-          if(j === x){
-            return 'X'
-          }
-          return r
-        })
-      }
-      return c
-    })
-    return newGrid
+  const setChoice = (y: number, x: number, who?: string) => {
+    setGrid((oldGrid) =>
+      oldGrid.map((c, i) => {
+        if (i === y) {
+          return c.map((r, j) => {
+            if (j === x) {
+              if (who === 'user') {
+                return 'X'
+              }
+              return 'O'
+            }
+            return r
+          })
+        }
+        return c
+      })
+    )
   }
 
   const handleClick = (y: number, x: number) => {
-    if(grid[y][x] === 'X') return
-    const userChoice = choice(y, x)
-    
-    setGrid(userChoice)
+    if (grid[y][x] === 'X') return
+    setChoice(y, x, 'user')
+    computerChoice(y, x)
+  }
 
-    setTimeout(() =>{
-      const c1 = Math.floor(Math.random() * 2)
-      const c2= Math.floor(Math.random() * 2)
-      if(grid[c1][c2] === 'X') return
-      
-    }, 1000)
+  const computerChoice = (y: number, x: number) => {
+    const roll = computerRoll()
+    if (roll[0] === y && roll[1] === x) return
+    if (grid[roll[0]][roll[1]] === '') {
+      setTimeout(() => {
+        setChoice(roll[0], roll[1])
+      }, 1000)
+      return
+    }
+    computerChoice(y, x)
+  }
+
+  const computerRoll = () => {
+    const c1: number = Math.floor(Math.random() * 2)
+    const c2: number = Math.floor(Math.random() * 2)
+    return [c1, c2]
   }
 
   return (
