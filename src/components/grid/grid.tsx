@@ -15,10 +15,10 @@ const Grid: React.FC<GridProps> = ({ grid, handleClick, theme }) => {
             let icon: string[]
             switch (rowItem) {
               case 'X':
-                icon = ['src/icons/lightX.png', 'src/icons/darkX.png']
+                icon = ['/lightX.png', '/darkX.png']
                 break
               case 'O':
-                icon = ['src/icons/oazul.png', 'src/icons/oblancaa.png']
+                icon = ['/oazul.png', '/oblancaa.png']
                 break
               default:
                 icon = ['', '']
@@ -30,13 +30,11 @@ const Grid: React.FC<GridProps> = ({ grid, handleClick, theme }) => {
                 key={`${x}_rowItem`}
                 onClick={() => handleClick(y, x)}
               >
-                {icon[0] ? (
+                {!!icon[0].length && (
                   <img
                     src={theme ? icon[1] : icon[0]}
                     className={styles.icon}
                   />
-                ) : (
-                  ''
                 )}
               </div>
             )
